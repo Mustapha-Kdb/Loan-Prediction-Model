@@ -25,7 +25,6 @@ model = BayesianNetwork(
 cpd_DebtIncomeRatio = TabularCPD(variable='DebtIncomeRatio', variable_card=2, values=[[0.5], [0.5]], state_names={'DebtIncomeRatio': ['Low', 'High']})
 cpd_Income = TabularCPD(variable='Income', variable_card=3, values=[[0.333], [0.333], [0.334]], state_names={'Income': ['High', 'Medium', 'Low']})
 
-
 # The representation of CPD in pgmpy is a bit different than the CPD shown in the above picture. In pgmpy the colums
 # are the evidences and rows are the states of the variable. So the grade CPD is represented like this:
 #
@@ -90,7 +89,25 @@ cpd_BankLoan = TabularCPD(variable='BankLoan', variable_card=2,
 # To complete
 # cpd_Assets =
 
+cpd_Assets = TabularCPD(variable='Assets', variable_card=3,
+                        values=[[0.6, 0.4, 0.1],
+                                [0.2, 0.5, 0.2],
+                                [0.2, 0.1, 0.7]],
+                        evidence=['Income'],
+                        evidence_card=[3],
+                        state_names={'Assets': ['High', 'Medium', 'Low'],
+                                     'Income':['High', 'Medium', 'Low']})
+
 # cpd_FutureIncome =
 
-# model.add_cpds(cpd_DebtIncomeRatio, cpd_Income, cpd_PaymentHistory, cpd_Age, cpd_Reliability, cpd_Assets, cpd_FutureIncome, cpd_BankLoan)
-# model.check_model()
+cpd_FutureIncome = TabularCPD(variable='FutureIncome', variable_card=2,
+                              values=[[0.9, 0.8, 0.7, 0.8, 0.6, 0.5, 0.7, 0.3, 0.1],
+                                      [0.1, 0.2, 0.3, 0.2, 0.4, 0.5, 0.3, 0.7, 0.9]],
+                              evidence=['Income','Assets'],
+                              evidence_card=[3,3],
+                              state_names={'FutureIncome':['Promising','Not_promising'],
+                                           'Income':['High','Medium','Low'],
+                                           'Assets':['High','Medium','Low']})
+
+model.add_cpds(cpd_DebtIncomeRatio, cpd_Income, cpd_PaymentHistory, cpd_Age, cpd_Reliability, cpd_Assets, cpd_FutureIncome, cpd_BankLoan)
+model.check_model()
